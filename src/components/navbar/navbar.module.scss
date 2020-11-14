@@ -1,0 +1,22 @@
+.container {
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  z-index: 3;
+
+  padding: 18px 30px;
+
+  .title {
+    letter-spacing: .1em;
+    font-weight: 600;
+  }
+
+  & .buttons {
+    display: flex;
+    justify-content: right;
+  }
+}

@@ -1,0 +1,34 @@
+$input-color: #ced4da;
+
+.container {
+  width: 100%;
+  padding-bottom: 25px;
+
+  & label {
+    cursor: pointer;
+  }
+
+  & .title {
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+
+  & .input {
+    width: 100%;
+    padding-left: 15px;
+    height: 38px;
+    border: 1px solid $input-color;
+    border-radius: 5px;
+
+    &::placeholder {
+      color: $input-color;
+    }
+  }
+
+  & .additionalHint {
+    color: #6c757d;
+    margin-top: 8px;
+    font-size: 14px;
+    letter-spacing: -1px;
+  }
+}

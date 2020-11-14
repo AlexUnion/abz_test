@@ -1,0 +1,29 @@
+$img-size: 73px;
+
+.container {
+  width: 30%;
+  margin-bottom: 60px;
+
+  .img {
+    width: $img-size;
+    height: $img-size;
+    border-radius: 50%;
+  }
+
+  .emailContainer {
+    position: relative;
+    cursor: pointer;
+    z-index: 1;
+
+    & .emailHint {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 16px);
+      padding: 6px 10px;
+      background-color: #333;
+      color: #fff;
+      border-radius: 3px;
+      opacity: .8;
+    }
+  }
+}

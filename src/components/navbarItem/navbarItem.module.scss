@@ -1,0 +1,11 @@
+@import './src/assets/styleRyles.style';
+
+.btn {
+  font-family: 'Open Sans', sans-serif;
+  margin-left: 30px;
+  cursor: pointer;
+
+  &:hover {
+    color: $primary-color;
+  }
+}

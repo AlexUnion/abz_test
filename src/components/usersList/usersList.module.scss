@@ -1,0 +1,39 @@
+@import "src/assets/styleRyles.style";
+
+.container {
+  background-color: $back-ground-second;
+  min-height: 100vh;
+
+  &:before {
+    content: "";
+    display: inline-block;
+    min-height: inherit;
+    height: 100%;
+    vertical-align: middle;
+  }
+
+  & .contentContainer {
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+
+    & .attention {
+      margin-bottom: 65px;
+    }
+
+    & .users {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    & .btn {
+      padding: 7px 62px;
+      background-color: $primary-color;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 5px;
+      border: none;
+    }
+  }
+}

@@ -1,0 +1,53 @@
+@import "src/assets/styleRyles.style";
+
+.container {
+  background-color: $back-ground-first;
+  min-height: 100vh;
+
+  &:before {
+    content: "";
+    display: inline-block;
+    min-height: inherit;
+    height: 100%;
+    vertical-align: middle;
+  }
+
+  & .contentContainer {
+    display: inline-block;
+    vertical-align: middle;
+    color: black;
+    margin: 0 3%;
+
+    & .title {
+      margin-bottom: 75px;
+    }
+
+    .content {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+
+      & .iconContainer {
+        max-height: 285px;
+      }
+
+      .about {
+        width: 55%;
+        text-align: justify;
+
+        & p {
+          margin-bottom: 32px;
+        }
+
+        & p:first-child {
+          margin-top: 0;
+        }
+
+        & .btn {
+          color: $primary-color;
+          padding: 0;
+        }
+      }
+    }
+  }
+}

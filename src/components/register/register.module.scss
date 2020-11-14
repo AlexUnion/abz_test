@@ -1,0 +1,48 @@
+@import "src/assets/styleRyles.style";
+
+.container {
+  background-color: $back-ground-first;
+  text-align: center;
+  min-height: 100vh;
+
+  & .attention {
+    margin-bottom: 38px;
+  }
+
+  & .form {
+    width: 468px;
+    display: block;
+    margin: auto;
+    text-align: left;
+
+    & .position {
+      margin-bottom: 24px;
+
+      & p:first-child {
+        margin: 0 0 24px;
+      }
+
+      & input {
+        margin: 0 10px 0 0;
+      }
+    }
+
+    & .photo {
+
+    }
+
+    & .btnContainer {
+      text-align: center;
+      width: 100%;
+
+      & .btn {
+        padding: 7px 62px;
+        background-color: $primary-color;
+        color: #fff;
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+      }
+    }
+  }
+}

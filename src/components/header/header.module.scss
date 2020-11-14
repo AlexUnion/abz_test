@@ -1,0 +1,37 @@
+@import './src/assets/styleRyles.style';
+
+.container {
+  background: center no-repeat url("../../assets/banner-photo.jpg") $secondary-color;
+  background-size: cover;
+  vertical-align: center;
+  text-align: left;
+  height: 100vh;
+
+  &:before {
+    content: "";
+    display: inline-block;
+    min-height: inherit;
+    height: 100%;
+    vertical-align: middle;
+  }
+
+  & .contentContainer {
+    display: inline-block;
+    vertical-align: middle;
+    color: white;
+    width: 55%;
+
+    & .title {
+      text-transform: uppercase;
+    }
+
+    & .btn {
+      background-color: $primary-color;
+      border-radius: 5px;
+    }
+
+    & .contentItem {
+      margin: 20px 0;
+    }
+  }
+}
