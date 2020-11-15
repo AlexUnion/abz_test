@@ -2,6 +2,19 @@ import React, { useState, useEffect } from 'react';
 import s from './register.module.scss';
 import RegisterItem from "../registerFormItem/registerFormItem.component";
 
+const POST_USER_URL = 'https://frontend-test-assignment-api.abz.agency/api/v1/users';
+const GET_TOKEN_URL = 'https://frontend-test-assignment-api.abz.agency/api/v1/token';
+
+async function getToken() {
+    const token = await fetch(GET_TOKEN_URL)
+        .then((data) => data.json())
+        .then(({ token }) => {
+            return token;
+        });
+
+    return token;
+}
+
 function validateEmail(email) {
     const re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
     return re.test(email);
@@ -18,8 +31,35 @@ function validatePhone(phone) {
     return idx === 0;
 }
 
-function handleSubmit(e) {
+function validateImg({ size }) {
+    return size < 5000000;
+}
+
+async function handleSubmit(e, data, file) {
+
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('email', data.email);
+    formData.append('phone', data.phone);
+    formData.append('position_id', '1');
+    formData.append('photo', file);
+
+    const token = await getToken();
+    console.log(token);
+
+    const response = await fetch(POST_USER_URL, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Token': token
+        }
+    }).then((res) => res.json())
+        .then((data) => {
+            return data;
+        });
+    console.log(response);
 }
 
 function Register({ updateUsers, updateValue }) {
@@ -33,6 +73,8 @@ function Register({ updateUsers, updateValue }) {
     useEffect(() => {
         console.log(userData);
     }, [userData]);
+
+    const ref = React.createRef();
 
     function handleBlur({ target }) {
         const { value, name } = target;
@@ -79,7 +121,8 @@ function Register({ updateUsers, updateValue }) {
             <div className={`${s.attention} paragraph`}>
                 Attention! After successful registration and alert, update the list of users in the block from the top
             </div>
-            <form action="" className={s.form} onSubmit={handleSubmit}>
+            <form action="" className={s.form}
+                  onSubmit={(e) => handleSubmit(e, userData, ref.current.files[0])}>
                 <RegisterItem onBlur={handleBlur}
                               title="Name"
                               name="name" hint="Your name"/>
@@ -106,7 +149,7 @@ function Register({ updateUsers, updateValue }) {
                     <div className={s.fileUpload}>
                         <div className={s.inner}>Upload your photo</div>
                         <button className={s.inner}>Browse</button>
-                        <input type="file"/>
+                        <input type="file" ref={ref}/>
                     </div>
                 </div>
                 <div className={s.btnContainer}>
