@@ -6,6 +6,29 @@ const POST_USER_URL = 'https://frontend-test-assignment-api.abz.agency/api/v1/us
 const GET_TOKEN_URL = 'https://frontend-test-assignment-api.abz.agency/api/v1/token';
 const GET_POSITIONS_URL = 'https://frontend-test-assignment-api.abz.agency/api/v1/positions';
 
+const registerItem = [
+    {
+        id: 0,
+        title: 'Name',
+        name: 'name',
+        hint: 'Your name',
+    },
+    {
+        id: 1,
+        title: 'Email',
+        name: 'email',
+        hint: 'Your email',
+    },
+    {
+        id: 2,
+        title: 'Phone number',
+        name: 'phone',
+        hint: '+380 XX XXX XX XX',
+        type: "tel",
+        additionalHint: "Enter phone number in international format"
+    }
+]
+
 async function getToken() {
     const token = await fetch(GET_TOKEN_URL)
         .then((data) => data.json())
@@ -151,16 +174,13 @@ function Register({ updateUsers, updateValue }) {
             <form action="" className={s.form}
                   onSubmit={(e) => (
                       handleSubmit(e, userData))}>
-                <RegisterItem onBlur={handleBlur}
-                              title="Name"
-                              name="name" hint="Your name"/>
-                <RegisterItem onBlur={handleBlur}
-                              title="Email"
-                              name="email" hint="Your email"/>
-                <RegisterItem onBlur={handleBlur}
-                              title="Phone number"
-                              name="phone" hint="+380 XX XXX XX XX"
-                              type="tel" additionalHint="Enter phone number in international format"/>
+                {registerItem.map(({id, name, title, hint, type, additionalHint }) => (
+                    <RegisterItem key={id} onBlur={handleBlur}
+                                  title={title} name={name}
+                                  hint={hint} type={type}
+                                  additionalHint={additionalHint}/>
+                ))}
+
                 <div className={s.position}>
 
                     <p>Select your position</p>
@@ -179,7 +199,13 @@ function Register({ updateUsers, updateValue }) {
                 <div className={s.photo}>
                     <p>Photo</p>
                     <div className={s.fileUpload}>
-                        <div className={s.inner}>Upload your photo</div>
+                        <div className={s.inner}>
+                            {
+                                userData.picture.file ?
+                                userData.picture.file.name :
+                                'Upload your photo'
+                            }
+                        </div>
                         <button className={s.inner}>Browse</button>
                         <input type="file" ref={ref} onChange={
                             function(e) {
