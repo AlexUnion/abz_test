@@ -4,6 +4,7 @@ import RegisterItem from "../registerFormItem/registerFormItem.component";
 
 const POST_USER_URL = 'https://frontend-test-assignment-api.abz.agency/api/v1/users';
 const GET_TOKEN_URL = 'https://frontend-test-assignment-api.abz.agency/api/v1/token';
+const GET_POSITIONS_URL = 'https://frontend-test-assignment-api.abz.agency/api/v1/positions';
 
 async function getToken() {
     const token = await fetch(GET_TOKEN_URL)
@@ -31,23 +32,26 @@ function validatePhone(phone) {
     return idx === 0;
 }
 
-function validateImg({ size }) {
-    return size < 5000000;
+function validateImg({ size, width, height }) {
+    return size < 5000000 && width > 70 && height > 70;
 }
 
-async function handleSubmit(e, data, file) {
+async function handleSubmit(e, data) {
 
     e.preventDefault();
+
+    const { name, email, phone, positionId, picture } = data;
+
+    if (!name || !email || !phone || !positionId) return;
 
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('email', data.email);
     formData.append('phone', data.phone);
-    formData.append('position_id', '1');
-    formData.append('photo', file);
+    formData.append('position_id', positionId);
+    formData.append('photo', picture.file);
 
     const token = await getToken();
-    console.log(token);
 
     const response = await fetch(POST_USER_URL, {
         method: 'POST',
@@ -68,7 +72,23 @@ function Register({ updateUsers, updateValue }) {
         name: '',
         email: '',
         phone: '',
+        positionId: '',
+        picture: {
+            file: null,
+            width: 0,
+            height: 0,
+        }
     })
+
+    const [positions, setPositions] = useState([]);
+
+    useEffect(() => {
+        fetch(GET_POSITIONS_URL)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) setPositions(data.positions);
+            });
+    }, []);
 
     useEffect(() => {
         console.log(userData);
@@ -115,6 +135,13 @@ function Register({ updateUsers, updateValue }) {
         }
     }
 
+    function handleRadioBtn (event) {
+        setUserData({
+            ...userData,
+            positionId: event.target.value,
+        })
+    }
+
     return (
         <div className={`${s.container} blockContainer`}>
             <div className="heading1 title">Register to get a work</div>
@@ -122,7 +149,8 @@ function Register({ updateUsers, updateValue }) {
                 Attention! After successful registration and alert, update the list of users in the block from the top
             </div>
             <form action="" className={s.form}
-                  onSubmit={(e) => handleSubmit(e, userData, ref.current.files[0])}>
+                  onSubmit={(e) => (
+                      handleSubmit(e, userData))}>
                 <RegisterItem onBlur={handleBlur}
                               title="Name"
                               name="name" hint="Your name"/>
@@ -134,22 +162,48 @@ function Register({ updateUsers, updateValue }) {
                               name="phone" hint="+380 XX XXX XX XX"
                               type="tel" additionalHint="Enter phone number in international format"/>
                 <div className={s.position}>
+
                     <p>Select your position</p>
-                    <p><input type="radio" name="position"
-                              value="Frontend Developer"/>Frontend Developer</p>
-                    <p><input type="radio" name="position"
-                              value="Backend Developer"/>Backend Developer</p>
-                    <p><input type="radio" name="position"
-                              value="Designer"/>Designer</p>
-                    <p><input type="radio" name="position"
-                              value="QA"/>QA</p>
+                    { positions.length ?
+                        positions.map(({ id, name }) => (
+                            <p key={id}>
+                                <input type="radio" name="position" value={id}
+                                       onClick={handleRadioBtn}/>
+                                      {name}
+                            </p>
+                        )) :
+                        <p>Loading positions</p>
+                    }
+
                 </div>
                 <div className={s.photo}>
                     <p>Photo</p>
                     <div className={s.fileUpload}>
                         <div className={s.inner}>Upload your photo</div>
                         <button className={s.inner}>Browse</button>
-                        <input type="file" ref={ref}/>
+                        <input type="file" ref={ref} onChange={
+                            function(e) {
+                                const url = window.url || window.webkitURL;
+                                const file = e.target.files[0];
+
+                                const img = new Image();
+                                img.onload = function () {
+                                    const { width, height } = this;
+                                    if (validateImg({ size: file.size, width, height })) {
+                                        setUserData({
+                                            ...userData,
+                                            picture: {
+                                                file,
+                                                width: +width,
+                                                height: +height,
+                                            }
+                                        });
+                                    } else {
+                                        console.log('Error: file');
+                                    }
+                                }
+                                img.src = url.createObjectURL(file);
+                            }}/>
                     </div>
                 </div>
                 <div className={s.btnContainer}>
